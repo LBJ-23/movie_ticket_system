@@ -1,5 +1,6 @@
 package com.yyc.controller;
 
+import com.yyc.config.Result;
 import com.yyc.entity.Manager;
 import com.yyc.service.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,8 @@ public class ManagerController {
 
 //    新增管理员数据
     @PostMapping
-    public Boolean save(@RequestBody Manager manager){
-        return managerService.save(manager);
+    public Result<?> save(@RequestBody Manager manager){
+        managerService.save(manager);
+        return Result.success();
     }
 }

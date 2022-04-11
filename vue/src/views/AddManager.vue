@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
-    <el-form :model="form" label-width="120px" size="large" >
+    <el-form :model="form" label-width="120px" size="large" class="managerForm">
       <el-form-item label="头像" >
         <el-upload
             class="avatar-uploader"
@@ -20,8 +20,8 @@
         <el-input v-model="form.password" />
       </el-form-item>
       <el-form-item label="性别">
-        <el-radio-group v-model="form.sex">
-          <el-radio label="男" />
+        <el-radio-group v-model="form.sex"  >
+          <el-radio style="" label="男" />
           <el-radio label="女" />
           <el-radio label="保密" />
         </el-radio-group>
@@ -29,7 +29,7 @@
       <el-form-item label="出生日期">
         <el-col :span="11">
           <el-date-picker
-              v-model="form.birtheday"
+              v-model="form.birthday"
               type="date"
               placeholder="请选择出生年月日"
               style="width: 100%"
@@ -38,8 +38,8 @@
       </el-form-item>
       <el-form-item label="归属">
         <el-select v-model="form.ascription" placeholder="请选择归属地方">
-          <el-option label="诚丰" value="shanghai" />
-          <el-option label="银河" value="beijing" />
+          <el-option label="诚丰电影院" value="诚丰电影院" />
+          <el-option label="银河电影院" value="银河电影院" />
         </el-select>
       </el-form-item>
       <el-form-item label="电话号码">
@@ -58,9 +58,9 @@
 <!--      </el-form-item>-->
 
       <el-form-item label="地址">
-        <el-input v-model="form.address" type="textarea" />
+        <el-input v-model="form.address" type="textarea" style="border: outset"/>
       </el-form-item>
-      <el-form-item style="padding-left: calc(50vh - 160px)">
+      <el-form-item style="padding-left: calc(50vh - 250px)">
         <el-button type="primary" @click="save" >保存</el-button>
       </el-form-item>
     </el-form>
@@ -71,6 +71,8 @@
 <script>
 import {ElMessage} from "element-plus";
 import { Plus } from '@element-plus/icons-vue'
+import request from "@/utils/request";
+
 
 export default {
   name: 'AddManager',
@@ -85,7 +87,9 @@ export default {
   },
   methods:{
     save(){
-
+      request.post("/managers", this.form).then(res => {
+        console.log(res)
+      })
     }
   }
 }
@@ -108,7 +112,7 @@ export default {
 
 <style>
 .avatar-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
+  border: 3px dashed #d9d9d9;
   border-radius: 6px;
   cursor: pointer;
   position: relative;
@@ -128,5 +132,15 @@ export default {
   text-align: center;
 }
 
+
+ .el-form-item__label {
+  font-size: 20px;
+   align: center;
+   vertical-align: middle;
+}
+ .el-radio__input{
+   border-radius: 50%;
+   border: 1px ridge white;
+ }
 
 </style>

@@ -9,8 +9,8 @@
             :value="item.value"
         />
       </el-select>
-      <el-input v-model="input" placeholder="" style="width: 300px;padding-right: 20px" />
-      <el-button type="primary">
+      <el-input v-model="input" placeholder="" style="width: 300px;margin-right: 20px" />
+      <el-button type="primary" style="margin-top: 5px">
         <el-icon style="vertical-align: middle;">
           <search />
         </el-icon>
@@ -24,7 +24,7 @@
                 stripe
                 class="manager"
                 :header-cell-style="{borderColor:'grey', fontSize: '14px', backgroundColor: '#87CEFA',textAlign:'center'}"
-                :cell-style="{borderColor: 'grey',textAlign: 'center'}"
+                :cell-style="{borderColor: 'grey',textAlign: 'center',color: 'black'}"
 
       >
         <el-table-column fixed prop="id" label="编号" min-width="60"/>
@@ -63,6 +63,7 @@
           :total="400"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
+          class="page"
       />
     </div>
   </div>
@@ -133,6 +134,9 @@ export default {
 
 <style scoped>
 .manager{
-
 }
+
+
+
+
 </style>
