@@ -10,7 +10,7 @@
         />
       </el-select>
       <el-input v-model="input" placeholder="" style="width: 300px;margin-right: 20px" />
-      <el-button type="primary" style="margin-top: 5px">
+      <el-button type="primary" style="margin-top: 5px" @click="load">
         <el-icon style="vertical-align: middle;">
           <search />
         </el-icon>
@@ -33,7 +33,7 @@
         <el-table-column prop="sex" label="性别" min-width="60" />
         <el-table-column prop="birthday" label="出生日期" min-width="120" />
         <el-table-column prop="ascription" label="归属" min-width="120" />
-        <el-table-column prop="phonenum" label="电话号码" width="120" />
+        <el-table-column prop="phone" label="电话号码" width="120" />
         <el-table-column prop="address" label="地址" width="600" />
 
         <el-table-column fixed="right" label="Operations" width="120">
@@ -55,12 +55,8 @@
     <div class="demo-pagination-block" style="display: flex;justify-content: center;padding-top: 20px">
       <el-pagination
           v-model:currentPage="currentPage"
-          v-model:page-size="pageSize"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
           layout="total, prev, pager, next, jumper"
-          :total="400"
+          :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           class="page"
@@ -72,6 +68,8 @@
 
 <script>
 import {Search,Edit,Delete} from "@element-plus/icons";
+import request from "@/utils/request";
+
 
 export default {
   name: "ManageManager",
@@ -80,9 +78,19 @@ export default {
     Edit,
     Delete,
   },
+  created(){
+    this.load()
+  },
   data(){
     return{
+      // 下拉选择框
       value: 'id',
+      pageSize: 10,
+      currentPage: 1,
+      total: 0,
+      input: '',
+      // 加载页面时调用load()方法
+
       options:[
         {
           value:'id',
@@ -93,7 +101,7 @@ export default {
           label: '用户名',
         },
         {
-          value: 'phonenum',
+          value: 'phone',
           label: '电话号码',
         },
         {
@@ -101,32 +109,38 @@ export default {
           label: '归属',
         }
       ],
-      managerData:[
-        {
-          id: '1',
-          username: 'Tom',
-          date: '2016-05-03',
 
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
-        {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036',
-        },
+      managerData:[
+
       ]
     }
   },
   methods:{
-    handleClick(){
+    // 加载表数据
+    load(){
+      console.log("success")
+      this.managerData.id =
+      request.get("/managers/findPage",{
+        params:{
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          type: this.value,
+          search: this.input,
+        }
+
+      }).then(res =>{
+        console.log(res)
+        this.managerData = res.data.records
+
+        this.total = res.data.total
+      })
+    },
+    handleSizeChange(){
 
     },
+    handleCurrentChange(){
+
+    }
   }
 }
 
@@ -135,7 +149,6 @@ export default {
 <style scoped>
 .manager{
 }
-
 
 
 

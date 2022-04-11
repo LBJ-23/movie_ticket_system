@@ -72,6 +72,8 @@
 import {ElMessage} from "element-plus";
 import { Plus } from '@element-plus/icons-vue'
 import request from "@/utils/request";
+import dayjs from "dayjs";
+
 
 
 export default {
@@ -87,6 +89,7 @@ export default {
   },
   methods:{
     save(){
+      this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss')
       request.post("/managers", this.form).then(res => {
         console.log(res)
       })
