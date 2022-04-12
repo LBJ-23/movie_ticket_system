@@ -26,6 +26,7 @@ public class Manager {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
 }
 
 

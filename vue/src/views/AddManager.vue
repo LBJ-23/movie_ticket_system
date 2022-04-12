@@ -138,8 +138,6 @@ export default {
 
  .el-form-item__label {
   font-size: 20px;
-   align: center;
-   vertical-align: middle;
 }
  .el-radio__input{
    border-radius: 50%;

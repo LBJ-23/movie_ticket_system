@@ -23,6 +23,7 @@ public class ManagerController {
     @Autowired
     private IManagerService managerService;
 
+
 //    新增管理员数据
     @PostMapping
     public Result<?> save(@RequestBody Manager manager){
@@ -36,9 +37,12 @@ public class ManagerController {
                               @RequestParam Integer pageSize,
                               @RequestParam String type,
                               @RequestParam String search){
-        QueryWrapper<Manager> q = Wrappers.<Manager>query();
 
-        Page<Manager> managerPage = managerService.page(new Page<>(pageNum, pageSize),q.like(type,search));
+        QueryWrapper<Manager> q = Wrappers.<Manager>query();
+        if (search!=""){
+            q.like(type,search);
+        }
+        Page<Manager> managerPage = managerService.page(new Page<>(pageNum, pageSize),q);
 
         return Result.success(managerPage);
     }
