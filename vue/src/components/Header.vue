@@ -1,6 +1,6 @@
 <template>
   <div style="height: 10vh; line-height: 50px; border-bottom: 1px solid #ccc; display: flex; width: 100%">
-    <div style="width: 30%; padding-left: 30px; font-weight: bold; color: blue">后台管理</div>
+    <div style="width: 30%; padding-left: 30px; font-weight: bold; color: blue;font-size: 40px;padding-top: 8px">后台管理系统</div>
     <div style="width: 70%"></div>
     <div style="width: 20%; display: flex;align-items: center;justify-content: right;padding-right: 20px" >
       <el-row class="demo-avatar demo-basic">

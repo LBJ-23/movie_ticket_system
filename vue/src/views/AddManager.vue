@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
-    <el-form :model="form" label-width="120px" size="large" class="managerForm">
+    <el-form :model="form" ref="managerForm" label-width="120px" size="large" class="managerForm" :rules="rules" >
       <el-form-item label="头像" >
         <el-upload
             class="avatar-uploader"
@@ -13,20 +13,20 @@
           <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
         </el-upload>
       </el-form-item>
-      <el-form-item label="用户名" >
+      <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" style="width: 500px"/>
       </el-form-item>
-      <el-form-item label="密码" >
-        <el-input v-model="form.password" />
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password" type="password" show-password/>
       </el-form-item>
-      <el-form-item label="性别">
+      <el-form-item label="性别" prop="sex">
         <el-radio-group v-model="form.sex"  >
           <el-radio style="" label="男" />
           <el-radio label="女" />
           <el-radio label="保密" />
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="出生日期">
+      <el-form-item label="出生日期" prop="birthday">
         <el-col :span="11">
           <el-date-picker
               v-model="form.birthday"
@@ -36,13 +36,13 @@
           />
         </el-col>
       </el-form-item>
-      <el-form-item label="归属">
-        <el-select v-model="form.ascription" placeholder="请选择归属地方">
+      <el-form-item label="归属" prop="ascription">
+        <el-select v-model="form.ascription" placeholder="请选择所属地方">
           <el-option label="诚丰电影院" value="诚丰电影院" />
           <el-option label="银河电影院" value="银河电影院" />
         </el-select>
       </el-form-item>
-      <el-form-item label="电话号码">
+      <el-form-item label="电话号码" prop="phone">
         <el-input v-model="form.phone" />
       </el-form-item>
 <!--      <el-form-item label="Instant delivery">-->
@@ -57,10 +57,11 @@
 <!--        </el-checkbox-group>-->
 <!--      </el-form-item>-->
 
-      <el-form-item label="地址">
+      <el-form-item label="地址" prop="address">
         <el-input v-model="form.address" type="textarea" style="border: outset"/>
       </el-form-item>
       <el-form-item style="padding-left: calc(50vh - 250px)">
+        <el-button @click="this.$refs.managerForm.resetFields()" >重新输入</el-button>
         <el-button type="primary" @click="save" >保存</el-button>
       </el-form-item>
     </el-form>
@@ -84,16 +85,67 @@ export default {
   },
   data(){
     return{
-      form: {}
+      form: {},
+      // 添加表单校验规则
+      rules: {
+        username: [
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {max: 20, message: '用户名长度不能超过20个字符', trigger: 'change'},
+        ],
+        password: [
+            {required: true, message: '请输入密码',trigger: 'blur'},
+            {pattern:/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,18}$/, message: '密码必须包含大小写字母和数字，且长度为8-18位' ,trigger:'change'}
+        ],
+        sex: [{required: true, message: '请选择性别', trigger: 'change'}],
+        birthday: [{required: true, message: '请选择日期', trigger: 'change'}],
+        ascription: [{required: true, message: '请选择所属地方', trigger: 'change'}],
+        phone: [
+          {required:true, message: '请输入电话号码', trigger: 'blur'},
+          {pattern:/^1\d{10}$/, message: '电话号码格式错误', trigger: 'change'}
+        ],
+        address: [
+            {required: true, message: '请输入地址', trigger: 'blur'},
+            {max: 50 ,message: '地址长度不能超过50个字符',trigger: 'change'}
+        ]
+      },
     }
   },
   methods:{
     save(){
-      this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss')
-      request.post("/managers", this.form).then(res => {
-        console.log(res)
+      // this.$refs.managerForm.validate().then(()=>{}).catch(()=>{})
+      this.$refs.managerForm.validate().then(() => {
+        this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
+        console.log(this.form.birthday)
+        request.post("/managers", this.form).then(res => {
+          console.log(res)
+          if(res.code === '200'){
+            ElMessage({
+              showClose: true,
+              type: "success",
+              message: "添加该名管理员信息成功！",
+              center: true,
+            })
+          }
+          else {
+            ElMessage({
+              showClose: true,
+              type: "error",
+              message: "添加该名管理员信息失败！",
+              center: true,
+            })
+          }
+          this.form = {}
+        })
+          }
+      ).catch(() => {
+        ElMessage({
+          showClose: true,
+          type: "error",
+          message: "所填信息有误，请重新确认！",
+          center: true
+        })
       })
-    }
+    },
   }
 }
 

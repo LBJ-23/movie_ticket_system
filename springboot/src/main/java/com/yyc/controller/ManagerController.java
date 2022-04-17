@@ -1,15 +1,12 @@
 package com.yyc.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyc.config.Result;
-import com.yyc.dao.ManagerDao;
 import com.yyc.entity.Manager;
 import com.yyc.service.IManagerService;
-import org.apache.catalina.manager.ManagerServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +23,16 @@ public class ManagerController {
 
 //    新增管理员数据
     @PostMapping
-    public Result<?> save(@RequestBody Manager manager){
+    public Result<?> saveManage(@RequestBody Manager manager){
+        System.out.println(manager);
+
         managerService.save(manager);
         return Result.success();
     }
 
 //    分页、条件查询
-    @GetMapping("/findPage")
-    public Result<?> findPage(@RequestParam Integer pageNum,
+    @GetMapping("/managerFindPage")
+    public Result<?> managerFindPage(@RequestParam Integer pageNum,
                               @RequestParam Integer pageSize,
                               @RequestParam String type,
                               @RequestParam String search){
@@ -43,7 +42,20 @@ public class ManagerController {
             q.like(type,search);
         }
         Page<Manager> managerPage = managerService.page(new Page<>(pageNum, pageSize),q);
+        managerPage.getRecords();
 
         return Result.success(managerPage);
+    }
+//    更新数据
+    @PutMapping()
+    public Result<?> updateManager(@RequestBody Manager manager){
+        managerService.updateById(manager);
+        return Result.success();
+    }
+//    删除数据
+    @DeleteMapping("/{id}")
+    public Result<?> delManager(@PathVariable Integer id){
+        managerService.removeById(id);
+        return Result.success();
     }
 }

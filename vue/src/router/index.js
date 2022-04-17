@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from "@/layout/Layout";
+import login from "@/views/login";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
         component: () => import("@/views/manageAccess"),
       },
     ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: login,
   },
 ]
 

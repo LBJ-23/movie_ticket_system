@@ -22,7 +22,7 @@ public class Manager {
         return birthday;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }

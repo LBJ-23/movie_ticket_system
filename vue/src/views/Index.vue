@@ -1,7 +1,6 @@
 <template>
   <div>
-    这是主页
-    <el-button>跳转</el-button>
+    欢迎来到电影购票后台管理系统！
   </div>
 </template>
 

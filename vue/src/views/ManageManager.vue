@@ -9,7 +9,7 @@
             :value="item.value"
         />
       </el-select>
-      <el-input v-model="input" placeholder="" style="width: 300px;margin-right: 20px" />
+      <el-input v-model="input" placeholder="" style="width: 300px;margin-right: 20px" clearable/>
       <el-button type="primary" style="margin-top: 5px" @click="load">
         <el-icon style="vertical-align: middle;">
           <search />
@@ -29,7 +29,7 @@
       >
         <el-table-column fixed prop="id" label="编号" min-width="80"/>
         <el-table-column fixed prop="username" label="用户名" min-width="100" />
-        <el-table-column prop="password" label="密码" min-width="150" />
+        <el-table-column prop="password" label="密码" min-width="150" type="password"/>
         <el-table-column prop="sex" label="性别" min-width="60" />
         <el-table-column prop="birthday" label="出生日期" min-width="120" />
         <el-table-column prop="ascription" label="归属" min-width="120" />
@@ -43,12 +43,22 @@
                 <Edit />
               </el-icon>
             </el-button>
-
-            <el-button type="text" style="height: 16px">
-              <el-icon style="vertical-align: middle;">
-                <Delete />
-              </el-icon>
-            </el-button>
+            <el-popconfirm
+                confirm-button-text="确定"
+                cancel-button-text="取消"
+                :icon="InfoFilled"
+                icon-color="red"
+                title="确认删除该行数据吗？"
+                @confirm="delManage(managerList.row.id)"
+            >
+              <template #reference>
+                <el-button type="text" style="height: 16px">
+                  <el-icon style="vertical-align: middle;">
+                    <Delete />
+                  </el-icon>
+                </el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -58,31 +68,30 @@
           v-model:currentPage="currentPage"
           layout="total, prev, pager, next, jumper"
           :total="total"
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           class="page"
       />
     </div>
     <div>
       <el-dialog v-model="reManagerDialog"  width="500px" center>
-        <el-form :model="form" label-width="auto" size="middle" class="managerForm">
-          <el-form-item label="编号" >
+        <el-form :model="form" ref="reManagerForm" label-width="auto" size="middle" class="managerForm" :rules="rules">
+          <el-form-item label="编号" prop="id">
             <p v-text="form.id" style="padding-left: 1vh"></p>
           </el-form-item>
-          <el-form-item label="用户名" >
+          <el-form-item label="用户名" prop="username">
             <el-input  v-model="form.username"/>
           </el-form-item>
-          <el-form-item label="密码" >
-            <el-input v-model="form.password" />
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="form.password" type="password" />
           </el-form-item>
-          <el-form-item label="性别">
+          <el-form-item label="性别" prop="sex">
             <el-radio-group v-model="form.sex"  >
               <el-radio style="" label="男" />
               <el-radio label="女" />
               <el-radio label="保密" />
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="出生日期">
+          <el-form-item label="出生日期" prop="birthday">
             <el-col :span="11">
               <el-date-picker
                   v-model="form.birthday"
@@ -92,23 +101,23 @@
               />
             </el-col>
           </el-form-item>
-          <el-form-item label="归属">
+          <el-form-item label="归属" prop="ascription">
             <el-select v-model="form.ascription" placeholder="请选择归属地方">
               <el-option label="诚丰电影院" value="诚丰电影院" />
               <el-option label="银河电影院" value="银河电影院" />
             </el-select>
           </el-form-item>
-          <el-form-item label="电话号码">
+          <el-form-item label="电话号码" prop="phone">
             <el-input v-model="form.phone" />
           </el-form-item>
-          <el-form-item label="地址">
+          <el-form-item label="地址" prop="address">
             <el-input v-model="form.address" type="textarea" style="border: outset"/>
           </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="reManager(this.reback)">还原</el-button>
-        <el-button type="primary" @click="reManagerDialog = false">保存</el-button>
+        <el-button type="primary" @click="saveReManager">保存</el-button>
       </span>
         </template>
       </el-dialog>
@@ -118,9 +127,11 @@
 </template>
 
 <script>
-import {Search,Edit,Delete} from "@element-plus/icons";
+import {Search,Edit,Delete,InfoFilled} from "@element-plus/icons";
 import request from "@/utils/request";
-import dayjs from "_dayjs@1.11.0@dayjs";
+import dayjs from "dayjs";
+import {ElMessage} from "element-plus";
+
 
 
 export default {
@@ -129,7 +140,9 @@ export default {
     Search,
     Edit,
     Delete,
+
   },
+  // 加载页面时调用load()方法
   created(){
     this.load()
   },
@@ -144,7 +157,7 @@ export default {
       reManagerDialog: false,
       form:{},
       reback:{},
-      // 加载页面时调用load()方法
+      InfoFilled,
 
       options:[
         {
@@ -165,9 +178,30 @@ export default {
         }
       ],
 
-      managerData:[
+      managerData:[],
 
-      ]
+      // 校验规则
+      rules: {
+        username: [
+          {required: true, message: '请输入用户名', trigger: 'blur'},
+          {max: 20, message: '用户名长度不能超过20个字符', trigger: 'change'},
+        ],
+        password: [
+          {required: true, message: '请输入密码',trigger: 'blur'},
+          {pattern:/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,18}$/, message: '密码必须包含大小写字母和数字，且长度为8-18位' ,trigger:'change'}
+        ],
+        sex: [{required: true, message: '请选择性别', trigger: 'change'}],
+        birthday: [{required: true, message: '请选择日期', trigger: 'change'}],
+        ascription: [{required: true, message: '请选择所属地方', trigger: 'change'}],
+        phone: [
+          {required:true, message: '请输入电话号码', trigger: 'blur'},
+          {pattern:/^1\d{10}$/, message: '电话号码格式错误', trigger: 'change'}
+        ],
+        address: [
+          {required: true, message: '请输入地址', trigger: 'blur'},
+          {max: 50 ,message: '地址长度不能超过50个字符',trigger: 'change'}
+        ]
+      },
     }
   },
   methods:{
@@ -177,7 +211,7 @@ export default {
       console.log("success")
       console.log(this.managerData)
       // this.managerData.id = this.preFixInteger(this.managerData.id)
-      request.get("/managers/findPage",{
+      request.get("/managers/managerFindPage",{
         params:{
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -190,14 +224,11 @@ export default {
         this.managerData = res.data.records
         this.total = res.data.total
         this.managerData = this.add0ManagerId(this.managerData)
-
       })
     },
-    handleSizeChange(){
-
-    },
+    // 改变当前页码数触发
     handleCurrentChange(){
-
+      this.load()
     },
     // id填充0
     preFixInteger(num) {
@@ -214,9 +245,63 @@ export default {
     reManager(row){
       this.reManagerDialog = true
       this.form = JSON.parse(JSON.stringify(row))
-      this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss')
       this.reback = JSON.parse(JSON.stringify(row))
     },
+    saveReManager(){
+      this.$refs.reManagerForm.validate().then(()=>{
+        this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
+        request.put("/managers",this.form).then(res => {
+          console.log(res)
+          this.reManagerDialog = false
+          if(res.code == '200'){
+            ElMessage({
+              showClose: true,
+              type: "success",
+              message: "修改数据成功！",
+              center: true,
+            })
+          }
+          else {
+            ElMessage({
+              showClose: true,
+              type: "error",
+              message: "修改数据失败！",
+              center: true,
+            })
+          }
+          this.load()
+        })
+      }).catch(() => {
+            ElMessage({
+              type: 'error',
+              message: '所填数据有误，请重新确认！',
+              showClose: true,
+            })
+      })
+    },
+    // 删除数据
+    delManage(id){
+      console.log(id)
+      request.delete("/managers/" +  id).then(res => {
+        if(res.code == '200'){
+          ElMessage({
+            showClose: true,
+            type: "success",
+            message: "删除数据成功！",
+            center: true,
+          })
+        }
+        else {
+          ElMessage({
+            showClose: true,
+            type: "error",
+            message: "删除数据失败！",
+            center: true,
+          })
+        }
+        this.load()
+      })
+    }
   }
 }
 
