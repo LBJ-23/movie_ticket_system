@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
-    <el-form :model="form" ref="managerForm" label-width="120px" size="large" class="managerForm" :rules="rules" >
+    <el-form :model="form" ref="managerForm" label-width="120px" size="large" class="managerForm" >
       <el-form-item label="头像" >
         <el-upload
             class="avatar-uploader"

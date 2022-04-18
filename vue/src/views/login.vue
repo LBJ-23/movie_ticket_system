@@ -1,9 +1,9 @@
 <template>
   <div :style="bg" style="align-items: center;justify-content: center;display: flex">
-    <div style="width: 25%;" >
+    <div style="width: 25%;min-width: 300px" >
       <div style="text-align: center;height: 5vh;font-size: 25px">电影管理后台登录系统</div>
       <div style="height: 15vh;display: flex;align-items: center;width: 100%;justify-content: center">
-        <el-select v-model="type" class="m-2" placeholder="Select" size="large" style=";width: 30%">
+        <el-select v-model="type" class="m-2" placeholder="Select" size="large" style="width: 30%;min-width: 120px">
           <el-option
               v-for="item in options"
               :key="item.value"
@@ -14,7 +14,7 @@
       </div>
       <el-form :model="loginForm" width="120px" style="text-align: center" size="large">
         <el-form-item >
-          <el-input v-model="loginForm.name" id="uname" :placeholder="userNamePlaceholder"/>
+          <el-input v-model="loginForm.username" id="uname" :placeholder="userNamePlaceholder"/>
         </el-form-item>
         <el-form-item>
           <el-input v-model="loginForm.password" show-password/>
@@ -45,11 +45,12 @@ export default {
     return{
       loginForm: {},
       type: 'id' ,
+      msgType: "账号",
 
       options:[
         {
           value: 'id',
-          label: '编号'
+          label: '账号'
         },
         {
           value: 'username',
@@ -78,15 +79,18 @@ export default {
           type: this.type,
         }
       }).then(res => {
+        console.log(res)
         if(res.code === '0'){
+
+          const msgT = this.msgType
           ElMessage({
             type: 'error',
-            message: '错误或密码错误',
+            message: msgT + '错误或密码错误，请重新输入！',
             showClose: true,
           })
         }
-        else if(res.code === '400'){
-          this.$route.push('/')
+        else if(res.code === '200'){
+          this.$router.push('/')
         }
       })
     },
@@ -99,12 +103,15 @@ export default {
     // 改变username输入框的placehoder值
     userNamePlaceholder(){
       if(this.type === "id"){
-        return "请输入编号"
+        this.msgType = "账号"
+        return "请输入账号"
       }
       else if(this.type === "username"){
+        this.msgType = "用户名"
         return "请输入用户名"
       }
       else if(this.type === "phone"){
+        this.msgType = "电话号码"
         return "请输入电话号码"
       }
     }
