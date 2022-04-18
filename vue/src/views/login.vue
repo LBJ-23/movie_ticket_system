@@ -25,7 +25,7 @@
           <el-checkbox>记住密码</el-checkbox>
         </div>
         <div style="width: 50%;display: flex;justify-content: right">
-          <el-button type="text">忘记密码</el-button>
+          <el-button type="text" @click="findPassword">忘记密码</el-button>
         </div>
       </div>
       <div style="display: flex;justify-content: center">
@@ -36,6 +36,9 @@
 </template>
 
 <script>
+import request from "@/utils/request";
+import {ElMessage, elPaginationKey} from "element-plus";
+
 export default {
   name: "login",
   data(){
@@ -68,7 +71,26 @@ export default {
   },
 
   methods:{
+    // 用户登录
     login(){
+      request.post("/managers/login",this.loginForm,{
+        params:{
+          type: this.type,
+        }
+      }).then(res => {
+        if(res.code === '0'){
+          ElMessage({
+            type: 'error',
+            message: '错误或密码错误',
+            showClose: true,
+          })
+        }
+        else if(res.code === '400'){
+          this.$route.push('/')
+        }
+      })
+    },
+    findPassword(){
 
     },
 
@@ -93,7 +115,7 @@ export default {
 
 <style scoped>
 .el-input{
-  border: 1px groove;
+  border: 1px groove ;
   border-radius: 5px;
 }
 </style>

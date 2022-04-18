@@ -116,7 +116,7 @@ export default {
       this.$refs.managerForm.validate().then(() => {
         this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
         console.log(this.form.birthday)
-        request.post("/managers", this.form).then(res => {
+        request.post("/managers/saveManager", this.form).then(res => {
           console.log(res)
           if(res.code === '200'){
             ElMessage({
@@ -134,7 +134,7 @@ export default {
               center: true,
             })
           }
-          this.form = {}
+          this.$refs.managerForm.resetFields()
         })
           }
       ).catch(() => {

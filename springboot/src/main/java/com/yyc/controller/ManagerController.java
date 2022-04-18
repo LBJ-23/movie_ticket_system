@@ -22,7 +22,7 @@ public class ManagerController {
 
 
 //    新增管理员数据
-    @PostMapping
+    @PostMapping("/saveManager")
     public Result<?> saveManage(@RequestBody Manager manager){
         System.out.println(manager);
 
@@ -42,12 +42,11 @@ public class ManagerController {
             q.like(type,search);
         }
         Page<Manager> managerPage = managerService.page(new Page<>(pageNum, pageSize),q);
-        managerPage.getRecords();
 
         return Result.success(managerPage);
     }
 //    更新数据
-    @PutMapping()
+    @PutMapping("/updateManager")
     public Result<?> updateManager(@RequestBody Manager manager){
         managerService.updateById(manager);
         return Result.success();
@@ -56,6 +55,17 @@ public class ManagerController {
     @DeleteMapping("/{id}")
     public Result<?> delManager(@PathVariable Integer id){
         managerService.removeById(id);
+        return Result.success();
+    }
+//    登录
+    @PostMapping("/login")
+    public Result<?> login(@RequestBody Manager manager,@RequestParam String type){
+        QueryWrapper<Manager> q = Wrappers.<Manager>query();
+        q.eq(type,manager.getUsername()).eq("password",manager.getPassword());
+        Manager res = managerService.getOne(q);
+        if(res == null){
+            return Result.error("0","账号/用户名/电话号码错误或密码错误");
+        }
         return Result.success();
     }
 }

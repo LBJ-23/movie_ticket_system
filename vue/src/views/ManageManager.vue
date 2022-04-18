@@ -250,7 +250,7 @@ export default {
     saveReManager(){
       this.$refs.reManagerForm.validate().then(()=>{
         this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
-        request.put("/managers",this.form).then(res => {
+        request.put("/managers/updateManager",this.form).then(res => {
           console.log(res)
           this.reManagerDialog = false
           if(res.code == '200'){
