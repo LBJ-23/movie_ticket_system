@@ -1,12 +1,12 @@
 <template >
 
-  <div style="height: 10vh;width: 100%">
+  <div style="height: 15vh;width: 100%">
     <Header/>
   </div>
   <div style="width: 100%;flex: 1">
     <router-view/>
   </div>
-  <div style="height: 10vh;width: 100%">
+  <div style="height: 15vh;width: 100%">
     <Footer/>
   </div>
 
