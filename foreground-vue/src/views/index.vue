@@ -2,15 +2,29 @@
   <div style="display: flex;justify-content: center;min-width: 1250px;height: 60vh;align-items: center">
     <el-carousel :interval="5000" arrow="always" style="width: 80%;min-width: 1000px" >
       <el-carousel-item v-for="item in 4" :key="item">
-        <h3>{{ item }}</h3>
+        <img src="@/assets/img/1.png" style="width: 100%;height: 50vh">
       </el-carousel-item>
     </el-carousel>
+  </div>
+  <div>
+
+   
   </div>
 </template>
 
 <script>
+
+import SwiperCore, { Navigation,Virtual, Pagination, Scrollbar, A11y } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+
+
 export default {
-  name: "index"
+  name: "index",
+  components:{
+    Swiper,
+    SwiperSlide
+  },
 }
 </script>
 
@@ -31,4 +45,7 @@ export default {
 .el-carousel__item:nth-child(2n + 1) {
   background-color: #d3dce6;
 }
+
+
+
 </style>
