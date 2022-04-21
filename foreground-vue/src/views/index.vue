@@ -1,30 +1,68 @@
 <template>
-  <div style="display: flex;justify-content: center;min-width: 1250px;height: 60vh;align-items: center">
+  <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
     <el-carousel :interval="5000" arrow="always" style="width: 80%;min-width: 1000px" >
       <el-carousel-item v-for="item in 4" :key="item">
-        <img src="@/assets/img/1.png" style="width: 100%;height: 50vh">
+        <img src="@/assets/img/1.png" style="width: 100%;height: 300px">
       </el-carousel-item>
     </el-carousel>
   </div>
   <div>
+    <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
+      <div class="wrapper" style="width: 80%;min-width: 1000px">
+        <swiper
+            :slides-per-view="5"
+            :space-between="20"
+            @swiper="onSwiper"
+            @slideChange="onSlideChange"
+        >
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+          <swiper-slide>
+            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          </swiper-slide>
+        </swiper>
 
-   
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 
-import SwiperCore, { Navigation,Virtual, Pagination, Scrollbar, A11y } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
-
+import 'swiper/css';
 
 export default {
   name: "index",
   components:{
     Swiper,
-    SwiperSlide
+    SwiperSlide,
   },
+  methods: {
+    onSwiper(swiper) {
+      console.log(swiper);
+    },
+    onSlideChange() {
+      console.log('slide change');
+    },
+  },
+
 }
 </script>
 
