@@ -1,31 +1,31 @@
 <template>
-  <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
-    <el-carousel :interval="5000" arrow="always" style="width: 80%;min-width: 1000px" >
-      <el-carousel-item v-for="item in 4" :key="item">
-        <img src="@/assets/img/1.png" style="width: 100%;height: 300px">
+  <div style="display: flex;justify-content: center;min-width: 1250px;height: 600px;align-items: center">
+    <el-carousel :interval="5000" arrow="always" style="width: 80%;min-width: 1000px" height="500px">
+      <el-carousel-item v-for="item in 4" :key="item" style="display: flex;justify-content: center" >
+        <img src="@/assets/img/1.png" style="height: 500px;width: 100%">
       </el-carousel-item>
     </el-carousel>
   </div>
   <div>
     <div style="display: flex;min-width: 1250px;align-items: center;justify-content: center">
       <div style="width: 40%">
-        <span >正在热映</span>
+        <span style="font-size: 50px"> 正在热映</span>
       </div>
       <div style="width: 40%;display: flex;justify-content: right;align-items: center"></div>
-      <el-button type="text">更多</el-button>
+      <el-button type="text" style="font-size: 25px">更多>></el-button>
     </div>
     <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
       <div class="wrapper" style="width: 80%;min-width: 1000px">
         <swiper
             :options="swiperOption"
             ref="mySwiper"
-            :slides-per-view="4"
+            :slides-per-view="5"
             class="swiper"
             @swiper="onSwiper"
             @slideChange="onSlideChange"
             
         >
-          <swiper-slide v-for="item in movie.slice(0,8)"  style="text-align: center" >
+          <swiper-slide v-for="item in now.slice(0,8)"  style="text-align: center" >
             <div>
               <img :src="item.url" style="height: 300px;width: 200px" >
             </div>
@@ -34,12 +34,41 @@
             </div>
           </swiper-slide>
         </swiper>
-
-
       </div>
     </div>
-
   </div>
+  <div>
+    <div style="display: flex;min-width: 1250px;align-items: center;justify-content: center">
+      <div style="width: 40%">
+        <span style="font-size: 50px">即将上映</span>
+      </div>
+      <div style="width: 40%;display: flex;justify-content: right;align-items: center"></div>
+      <el-button type="text" style="font-size: 25px">更多>></el-button>
+    </div>
+    <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
+      <div class="wrapper" style="width: 80%;min-width: 1000px">
+        <swiper
+            :options="swiperOption"
+            ref="mySwiper"
+            :slides-per-view="5"
+            class="swiper"
+            @swiper="onSwiper"
+            @slideChange="onSlideChange"
+
+        >
+          <swiper-slide v-for="item in soon.slice(0,8)"  style="text-align: center" >
+            <div>
+              <img :src="item.url" style="height: 300px;width: 200px" >
+            </div>
+            <div>
+              <span style=";width: 200px">{{item.title}}</span>
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -57,7 +86,33 @@ export default {
   },
   data(){
     return{
-      movie:[
+      now:[
+        {
+          url: require('@/assets/img/movie1.png'),
+          title: '超凡蜘蛛侠'
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },{
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        }
+      ],
+      soon:[
         {
           url: require('@/assets/img/movie1.png'),
           title: '超凡蜘蛛侠'

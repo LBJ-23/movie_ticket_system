@@ -138,6 +138,7 @@ export default {
         })
           }
       ).catch(() => {
+        console.log("wrong")
         ElMessage({
           showClose: true,
           type: "error",
