@@ -7,52 +7,90 @@
     </el-carousel>
   </div>
   <div>
+    <div style="display: flex;min-width: 1250px;align-items: center;justify-content: center">
+      <div style="width: 40%">
+        <span >正在热映</span>
+      </div>
+      <div style="width: 40%;display: flex;justify-content: right;align-items: center"></div>
+      <el-button type="text">更多</el-button>
+    </div>
     <div style="display: flex;justify-content: center;min-width: 1250px;height: 400px;align-items: center">
       <div class="wrapper" style="width: 80%;min-width: 1000px">
         <swiper
-            :slides-per-view="5"
-            :space-between="20"
+            :options="swiperOption"
+            ref="mySwiper"
+            :slides-per-view="4"
+            class="swiper"
             @swiper="onSwiper"
             @slideChange="onSlideChange"
+            
         >
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
-          </swiper-slide>
-          <swiper-slide>
-            <img src="@/assets/img/movie1.png" style="height: 300px;width: 200px">
+          <swiper-slide v-for="item in movie.slice(0,8)"  style="text-align: center" >
+            <div>
+              <img :src="item.url" style="height: 300px;width: 200px" >
+            </div>
+            <div>
+              <span style=";width: 200px">{{item.title}}</span>
+            </div>
           </swiper-slide>
         </swiper>
 
+
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
 
-import { Swiper, SwiperSlide } from 'swiper/vue';
+
+import { Swiper, SwiperSlide, Navigation} from 'swiper/vue';
 import 'swiper/css';
+
 
 export default {
   name: "index",
   components:{
     Swiper,
     SwiperSlide,
+  },
+  data(){
+    return{
+      movie:[
+        {
+          url: require('@/assets/img/movie1.png'),
+          title: '超凡蜘蛛侠'
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        },{
+          url:require('@/assets/img/movie1.png')
+        },
+        {
+          url:require('@/assets/img/movie1.png')
+        }
+      ],
+      swiperOption:{
+        loop:true,
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev"
+        },
+      },
+    }
   },
   methods: {
     onSwiper(swiper) {
@@ -61,6 +99,15 @@ export default {
     onSlideChange() {
       console.log('slide change');
     },
+    //index.js
+    prevImg(){
+      console.log("prev")
+    },
+    nextImg(){
+      console.log("next")
+
+    },
+
   },
 
 }
