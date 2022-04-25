@@ -1,6 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
-    <el-form :model="userForm" ref="userForm" label-width="120px" size="large" class="userForm" :rules="rules" >
+    <el-form :model="userForm" ref="userForm" label-width="120px" size="large" class="userForm" :rules="userRules" >
       <el-form-item label="头像" >
         <el-upload
             class="avatar-uploader"
@@ -40,18 +40,6 @@
       <el-form-item label="电话号码" prop="phone">
         <el-input v-model="userForm.phone" />
       </el-form-item>
-      <!--      <el-form-item label="Instant delivery">-->
-      <!--        <el-switch v-model="form.delivery" />-->
-      <!--      </el-form-item>-->
-      <!--      <el-form-item label="Activity type">-->
-      <!--        <el-checkbox-group v-model="form.type">-->
-      <!--          <el-checkbox label="Online activities" name="type" />-->
-      <!--          <el-checkbox label="Promotion activities" name="type" />-->
-      <!--          <el-checkbox label="Offline activities" name="type" />-->
-      <!--          <el-checkbox label="Simple brand exposure" name="type" />-->
-      <!--        </el-checkbox-group>-->
-      <!--      </el-form-item>-->
-
       <el-form-item label="地址" prop="address">
         <el-input v-model="userForm.address" type="textarea" style="border: outset"/>
       </el-form-item>
@@ -79,7 +67,7 @@ export default {
   data(){
     return{
       userForm:{},
-      rules: {
+      userRules: {
         username: [
           {required: true, message: '请输入用户名', trigger: 'blur'},
           {max: 20, message: '用户名长度不能超过20个字符', trigger: 'change'},
@@ -106,9 +94,9 @@ export default {
       // this.$refs.managerForm.validate().then(()=>{}).catch(()=>{})
       this.$refs.userForm.validate().then(() => {
         this.userForm.birthday = dayjs(new Date(this.userForm.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
-        console.log(this.form.birthday)
+        console.log(this.userForm.birthday)
         console.log("right")
-        request.post("/users/saveUser", this.form).then(res => {
+        request.post("/users/addUser", this.userForm).then(res => {
           console.log(res)
           if(res.code === '200'){
             ElMessage({
