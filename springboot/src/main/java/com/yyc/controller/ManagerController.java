@@ -9,6 +9,8 @@ import com.yyc.entity.Manager;
 import com.yyc.service.IManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -59,14 +61,32 @@ public class ManagerController {
         return Result.success();
     }
 //    登录
+    @CrossOrigin
     @PostMapping("/login")
-    public Result<?> login(@RequestBody Manager manager,@RequestParam String type){
+    public Result<?> login(@RequestBody Manager manager,@RequestParam String type,HttpSession session){
         QueryWrapper<Manager> q = Wrappers.<Manager>query();
         q.eq(type,manager.getUsername()).eq("password",manager.getPassword());
         Manager res = managerService.getOne(q);
         if(res == null){
             return Result.error("0","账号/用户名/电话号码错误或密码错误");
         }
+        System.out.println(res.getUsername());
+        session.setAttribute("loginUser",res.getUsername());
         return Result.success();
     }
+
+//    登出
+    @PostMapping("/logout")
+    public Result<?> logout(HttpSession request){
+        request.removeAttribute("loginUser");
+        return Result.success();
+    }
+
+//    返回登录界面
+    @GetMapping("/toLogin")
+    public String toLogin(){
+        System.out.println("in");
+        return "hhh";
+    }
+
 }

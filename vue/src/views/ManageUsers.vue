@@ -73,7 +73,7 @@
     </div>
     <div>
       <el-dialog v-model="reUserDialog"  width="500px" center>
-        <el-form :model="userForm" ref="reUserForm" label-width="auto" size="middle" class="managerForm" :rules="userRules">
+        <el-form :model="userForm" ref="reUserForm" label-width="auto" size="middle" class="userForm" :rules="userRules">
           <el-form-item label="编号" prop="id">
             <p v-text="userForm.id" style="padding-left: 1vh"></p>
           </el-form-item>
@@ -139,7 +139,6 @@ export default {
       total: 0,
       input: '',
       reUserDialog: false,
-      form:{},
       reback:{},
       userData:[],
       userForm:{},
@@ -159,6 +158,26 @@ export default {
           label: '电话号码',
         },
       ],
+      userRules: {
+        username: [
+          {required: true, message: '请输入用户名', trigger: 'blur'},
+          {max: 20, message: '用户名长度不能超过20个字符', trigger: 'change'},
+        ],
+        password: [
+          {required: true, message: '请输入密码',trigger: 'blur'},
+          {pattern:/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,18}$/, message: '密码必须包含大小写字母和数字，且长度为8-18位' ,trigger:'change'}
+        ],
+        sex: [{required: true, message: '请选择性别', trigger: 'change'}],
+        birthday: [{required: true, message: '请选择日期', trigger: 'change'}],
+        phone: [
+          {required:true, message: '请输入电话号码', trigger: 'blur'},
+          {pattern:/^1\d{10}$/, message: '电话号码格式错误', trigger: 'change'}
+        ],
+        address: [
+          {required: true, message: '请输入地址', trigger: 'blur'},
+          {max: 50 ,message: '地址长度不能超过50个字符',trigger: 'change'}
+        ]
+      },
     }
   },
   created() {

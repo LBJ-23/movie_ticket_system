@@ -10,6 +10,8 @@ import com.yyc.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -51,4 +53,7 @@ public class UserController {
         userService.removeById(id);
         return Result.success();
     }
+
+
+
 }

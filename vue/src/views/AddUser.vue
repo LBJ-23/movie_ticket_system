@@ -139,6 +139,8 @@ export default {
   height: 178px;
   display: block;
 }
+</style>
+<style>
 .avatar-uploader .el-upload {
   border: 3px dashed #d9d9d9;
   border-radius: 6px;
@@ -159,6 +161,8 @@ export default {
   height: 80px;
   text-align: center;
 }
+
+
 .el-form-item__label {
   font-size: 20px;
 }
