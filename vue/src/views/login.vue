@@ -81,7 +81,6 @@ export default {
       }).then(res => {
         console.log(res)
         if(res.code === '0'){
-
           const msgT = this.msgType
           ElMessage({
             type: 'error',
@@ -90,6 +89,8 @@ export default {
           })
         }
         else if(res.code === '200'){
+          console.log(res.data.username)
+          sessionStorage.setItem("loginUser",JSON.stringify(res.data.username))
           this.$router.push('/')
         }
       })

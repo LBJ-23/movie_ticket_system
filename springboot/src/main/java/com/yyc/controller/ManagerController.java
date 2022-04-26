@@ -72,7 +72,7 @@ public class ManagerController {
         }
         System.out.println(res.getUsername());
         session.setAttribute("loginUser",res.getUsername());
-        return Result.success();
+        return Result.success(res);
     }
 
 //    登出

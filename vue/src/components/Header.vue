@@ -14,7 +14,7 @@
       </el-row>
       <el-dropdown style="padding-left: 20px">
         <span class="el-dropdown-link" style="font-size: 25px;display:flex;justify-content: right">
-          username
+          <span>{{loginUser}}</span>
           <el-icon class="el-icon--right" style="font-size: 20px;display: flex;justify-content: left">
             <arrow-down />
           </el-icon>
@@ -22,7 +22,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="renew">个人信息</el-dropdown-item>
-            <el-dropdown-item @click="$router.push('/login')">登出</el-dropdown-item>
+            <el-dropdown-item @click="logout">登出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -82,6 +82,7 @@
 
 <script>
   import { ArrowDown, UserFilled , } from '@element-plus/icons-vue'
+  import {ElMessage} from "element-plus";
   export default {
     name: "Header.vue",
     components:{
@@ -92,12 +93,23 @@
       return{
         form:{},
         renewDialog: false,
+        loginUser: sessionStorage.getItem("loginUser") ? JSON.parse(sessionStorage.getItem("loginUser")) : ""
       }
     },
     methods:{
       renew(){
         this.renewDialog=true
         
+      },
+      logout(){
+        this.$router.push("/login")
+        sessionStorage.removeItem("loginUser")
+        ElMessage({
+          type: 'success',
+          message: '登出成功！',
+          showClose: true,
+          center: true,
+        })
       }
     }
 

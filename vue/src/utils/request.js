@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from "@/router";
 
 /**
  * 封装axios
@@ -17,6 +18,7 @@ request.interceptors.request.use(config => {
     config.headers['Content-Type'] = 'application/json;charset=utf-8';
 
     // config.headers['token'] = user.token;  // 设置请求头
+
     return config
 }, error => {
     return Promise.reject(error)
@@ -26,6 +28,7 @@ request.interceptors.request.use(config => {
 // 可以在接口响应后统一处理结果
 request.interceptors.response.use(
     response => {
+
         let res = response.data;
         // 如果是返回的文件
         if (response.config.responseType === 'blob') {
