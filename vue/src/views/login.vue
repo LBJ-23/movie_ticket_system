@@ -90,7 +90,7 @@ export default {
         }
         else if(res.code === '200'){
           console.log(res.data.username)
-          sessionStorage.setItem("loginUser",JSON.stringify(res.data.username))
+          sessionStorage.setItem("loginUser",JSON.stringify(res.data.id))
           this.$router.push('/')
         }
       })

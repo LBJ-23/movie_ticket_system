@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/files")
+@CrossOrigin
 public class fileController {
 
     @Value("${files.upload.path}")
@@ -44,7 +45,7 @@ public class fileController {
         System.out.println(uploadFile);
         //把后去到文件存储到本地
         file.transferTo(uploadFile);
-        String fileUrl = "http:localhost:81/files/" + uuid;
+        String fileUrl = "http://localhost:81/files/" + uuid;
         return fileUrl;
     }
 

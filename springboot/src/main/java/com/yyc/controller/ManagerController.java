@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yyc.config.Result;
 import com.yyc.entity.Manager;
 import com.yyc.service.IManagerService;
+import com.yyc.service.impl.ManagerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -82,11 +83,11 @@ public class ManagerController {
         return Result.success();
     }
 
-//    返回登录界面
-    @GetMapping("/toLogin")
-    public String toLogin(){
-        System.out.println("in");
-        return "hhh";
+//    获取单个管理员信息
+    @GetMapping("/getOneManager/{id}")
+    public Result<?> getOneManager(@PathVariable Integer id){
+        Manager manager = managerService.getById(id);
+        return Result.success(manager);
     }
 
 }

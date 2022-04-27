@@ -7,14 +7,14 @@
         <el-col >
           <div class="demo-basic--circle" >
             <div class="block" style="display: flex;align-items: center">
-              <el-avatar :size="30" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'" />
+              <el-avatar :size="30" :src=this.loginImg />
             </div>
           </div>
         </el-col>
       </el-row>
       <el-dropdown style="padding-left: 20px">
         <span class="el-dropdown-link" style="font-size: 25px;display:flex;justify-content: right">
-          <span>{{loginUser}}</span>
+          <span>{{this.loginUsername}}</span>
           <el-icon class="el-icon--right" style="font-size: 20px;display: flex;justify-content: left">
             <arrow-down />
           </el-icon>
@@ -29,7 +29,7 @@
     </div>
     <div>
       <el-dialog v-model="renewDialog"  width="500px" center>
-        <el-form :model="form" ref="renewForm" label-width="auto" size="middle" class="managerForm" :rules="rules">
+        <el-form :model="form" ref="renewForm" label-width="auto" size="middle" class="managerForm" :rules="rules" >
           <el-form-item label="编号" prop="id">
             <p v-text="form.id" style="padding-left: 1vh"></p>
           </el-form-item>
@@ -47,9 +47,6 @@
           </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input  v-model="form.username"/>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input v-model="form.password" type="password" />
           </el-form-item>
           <el-form-item label="性别" prop="sex">
             <el-radio-group v-model="form.sex"  >
@@ -69,10 +66,7 @@
             </el-col>
           </el-form-item>
           <el-form-item label="归属" prop="ascription">
-            <el-select v-model="form.ascription" placeholder="请选择归属地方">
-              <el-option label="诚丰电影院" value="诚丰电影院" />
-              <el-option label="银河电影院" value="银河电影院" />
-            </el-select>
+            <p v-text="form.ascription" style="padding-left: 1vh"></p>
           </el-form-item>
           <el-form-item label="电话号码" prop="phone">
             <el-input v-model="form.phone" />
@@ -83,7 +77,7 @@
         </el-form>
         <template #footer>
       <span class="dialog-footer">
-        <el-button @click="reManager(this.reback)">还原</el-button>
+        <el-button @click="reback">还原</el-button>
         <el-button type="primary" @click="saveReManager">保存</el-button>
       </span>
         </template>
@@ -95,6 +89,8 @@
 <script>
   import { ArrowDown, UserFilled ,Plus } from '@element-plus/icons-vue'
   import {ElMessage} from "element-plus";
+  import request from "@/utils/request";
+  import dayjs from "dayjs";
   export default {
     name: "Header.vue",
     components:{
@@ -102,17 +98,51 @@
       UserFilled,
       Plus
     },
+    created() {
+      this.load()
+    },
     data(){
       return{
         form:{},
         renewDialog: false,
-        loginUser: sessionStorage.getItem("loginUser") ? JSON.parse(sessionStorage.getItem("loginUser")) : ""
+        loginUsername:"",
+        loginImg:"",
+        loginUser: sessionStorage.getItem("loginUser") ? JSON.parse(sessionStorage.getItem("loginUser")) : "",
+        rules: {
+          username: [
+            {required: true, message: '请输入用户名', trigger: 'blur'},
+            {max: 20, message: '用户名长度不能超过20个字符', trigger: 'change'},
+          ],
+          password: [
+            {required: true, message: '请输入密码',trigger: 'blur'},
+            {pattern:/^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).{8,18}$/, message: '密码必须包含大小写字母和数字，且长度为8-18位' ,trigger:'change'}
+          ],
+          sex: [{required: true, message: '请选择性别', trigger: 'change'}],
+          birthday: [{required: true, message: '请选择日期', trigger: 'change'}],
+          phone: [
+            {required:true, message: '请输入电话号码', trigger: 'blur'},
+            {pattern:/^1\d{10}$/, message: '电话号码格式错误', trigger: 'change'}
+          ],
+          address: [
+            {required: true, message: '请输入地址', trigger: 'blur'},
+            {max: 50 ,message: '地址长度不能超过50个字符',trigger: 'change'}
+          ]
+        },
       }
     },
     methods:{
       renew(){
         this.renewDialog=true
-        
+      },
+      load(){
+        console.log(this.loginUser)
+        console.log("/managers/getOneManager/" + this.loginUser)
+        request.get("/managers/getOneManager/" + this.loginUser).then(res => {
+          console.log(res)
+          this.form = res.data
+          this.loginUsername = res.data.username
+          this.loginImg = res.data.img
+        })
       },
       logout(){
         this.$router.push("/login")
@@ -125,10 +155,47 @@
         })
       },
       handleAvatarSuccess(res){
-        //console.log(res)
+        console.log(res)
         this.form.img = res
         console.log(this.form.img)
-      }
+      },
+      saveReManager(){
+        this.$refs.renewForm.validate().then(()=>{
+          this.form.birthday = dayjs(new Date(this.form.birthday)).format(' YYYY-MM-DD HH:mm:ss').toString()
+          request.put("/managers/updateManager",this.form).then(res => {
+            console.log(res)
+            this.reManagerDialog = false
+            if(res.code == '200'){
+              ElMessage({
+                showClose: true,
+                type: "success",
+                message: "修改数据成功！",
+                center: true,
+              })
+              this.load()
+            }
+            else {
+              ElMessage({
+                showClose: true,
+                type: "error",
+                message: "修改数据失败！",
+                center: true,
+              })
+            }
+          })
+        }).catch(() => {
+          ElMessage({
+            type: 'error',
+            message: '所填数据有误，请重新确认！',
+            showClose: true,
+          })
+        })
+      },
+      reback(){
+        console.log("in")
+        console.log(this.remain)
+        this.load()
+      },
     }
 
   }
@@ -140,8 +207,8 @@
 
 /*上传头像*/
 .avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
+  width: 80px;
+  height: 80px;
   display: block;
 }
 </style>

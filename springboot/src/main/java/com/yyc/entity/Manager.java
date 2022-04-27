@@ -16,6 +16,7 @@ public class Manager {
     private String ascription;
     private String phone;
     private String address;
+    private String img;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     public Date getBirthday() {
