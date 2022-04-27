@@ -33,6 +33,18 @@
           <el-form-item label="编号" prop="id">
             <p v-text="form.id" style="padding-left: 1vh"></p>
           </el-form-item>
+          <el-form-item label="头像" >
+            <el-upload
+                class="avatar-uploader"
+                action="http://localhost:81/files/upload"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+            >
+              <img v-if="form.img" :src="form.img" class="avatar" />
+              <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+            </el-upload>
+          </el-form-item>
           <el-form-item label="用户名" prop="username">
             <el-input  v-model="form.username"/>
           </el-form-item>
@@ -81,13 +93,14 @@
 </template>
 
 <script>
-  import { ArrowDown, UserFilled , } from '@element-plus/icons-vue'
+  import { ArrowDown, UserFilled ,Plus } from '@element-plus/icons-vue'
   import {ElMessage} from "element-plus";
   export default {
     name: "Header.vue",
     components:{
       ArrowDown,
-      UserFilled
+      UserFilled,
+      Plus
     },
     data(){
       return{
@@ -110,6 +123,11 @@
           showClose: true,
           center: true,
         })
+      },
+      handleAvatarSuccess(res){
+        //console.log(res)
+        this.form.img = res
+        console.log(this.form.img)
       }
     }
 
@@ -120,6 +138,34 @@
 
 <style scoped>
 
-  /*头像*/
+/*上传头像*/
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
+  <style>
+  .avatar-uploader .el-upload {
+    border: 3px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: var(--el-transition-duration-fast);
+  }
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+}
+
 
 </style>

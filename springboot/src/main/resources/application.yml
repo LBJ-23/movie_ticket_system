@@ -16,3 +16,6 @@ mybatis-plus:
     db-config:
       id-type: auto
 
+files:
+  upload:
+    path: E:\upload\
