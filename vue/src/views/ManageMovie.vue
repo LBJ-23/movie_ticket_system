@@ -40,7 +40,7 @@
         <el-table-column prop="actor" label="演员" min-width="150" />
         <el-table-column prop="director" label="导演" width="100" />
         <el-table-column prop="source" label="产地" width="100" />
-        <el-table-column prop="introduce" label="电影简介" width="600" />
+        <el-table-column prop="introduce" label="电影简介" width="1000" />
 
         <el-table-column fixed="right" label="Operations" width="120">
           <template #default="movieList">
@@ -72,15 +72,16 @@
     <div class="demo-pagination-block" style="display: flex;justify-content: center;padding-top: 20px">
       <el-pagination
           v-model:currentPage="currentPage"
-          layout="total, prev, pager, next, jumper"
+          layout="total,prev, pager, next, jumper"
           :total="total"
+          v-model:page-size="pageSize"
           @current-change="handleCurrentChange"
           class="page"
       />
     </div>
     <div>
       <el-dialog v-model="reMovieDialog"  width="500px" center>
-        <el-form :model="movieForm" ref="reManagerForm" label-width="auto" size="middle" class="managerForm" :rules="rules">
+        <el-form :model="movieForm" ref="movieForm" label-width="auto" size="middle" class="managerForm" :rules="movieRules">
           <el-form-item label="编号" prop="id">
             <p v-text="movieForm.id" style="padding-left: 1vh"></p>
           </el-form-item>
@@ -102,7 +103,7 @@
           <el-form-item label="放映时长" prop="duration">
             <el-input v-model="movieForm.duration"/>
           </el-form-item>
-          <el-form-item label="电影类型" prop="type" style="width: 650px">
+          <el-form-item label="电影类型" prop="type" style="width: 500px">
             <el-checkbox-group v-model="movieForm.type">
               <el-checkbox label="动作" />
               <el-checkbox label="喜剧" />
@@ -141,15 +142,11 @@
           <el-form-item label="电影简介" prop="introduce">
             <el-input v-model="movieForm.introduce" type="textarea" style="border: outset"/>
           </el-form-item>
-          <el-form-item style="padding-left: calc(50vh - 250px)">
-            <el-button @click="this.$refs.movieForm.resetFields()" >重新输入</el-button>
-            <el-button type="primary" @click="save" >保存</el-button>
-          </el-form-item>
         </el-form>
         <template #footer>
       <span class="dialog-footer">
         <el-button @click="reMovie(this.reback)">还原</el-button>
-        <el-button type="primary" @click="saveMovie">保存</el-button>
+        <el-button type="primary" @click="saveReMovie">保存</el-button>
       </span>
         </template>
       </el-dialog>
@@ -158,7 +155,7 @@
 </template>
 
 <script>
-import {Search,Edit,Delete,InfoFilled} from "@element-plus/icons";
+import {Search,Edit,Delete,InfoFilled,Plus} from "@element-plus/icons";
 import request from "@/utils/request";
 import dayjs from "dayjs";
 import {ElMessage} from "element-plus";
@@ -168,6 +165,7 @@ export default {
     Search,
     Edit,
     Delete,
+    Plus
   },
   created() {
     this.load()
@@ -230,10 +228,128 @@ export default {
     handleCurrentChange(){
       this.load()
     },
+    // 修改数据
+    reMovie(row){
+      this.reMovieDialog = true
+      this.movieForm = JSON.parse(JSON.stringify(row))
+      this.movieForm.type = this.movieForm.type.split(",")
+      this.reback = JSON.parse(JSON.stringify(row))
+    },
+    saveReMovie(){
+      this.$refs.movieForm.validate().then(()=>{
+        this.movieForm.releasedTime = dayjs(new Date(this.movieForm.releasedTime)).format(' YYYY-MM-DD HH:mm:ss').toString()
+        if (this.movieForm.type) {undefined
+          this.movieForm.type = this.movieForm.type.join(",");
+        }
+        console.log("in")
+        request.put("/movies/updateMovie",this.movieForm).then(res => {
+          console.log(res)
+          this.reManagerDialog = false
+          if(res.code == '200'){
+            ElMessage({
+              showClose: true,
+              type: "success",
+              message: "修改数据成功！",
+              center: true,
+            })
+          }
+          else {
+            ElMessage({
+              showClose: true,
+              type: "error",
+              message: "修改数据失败！",
+              center: true,
+            })
+          }
+          this.load()
+        })
+      }).catch(() => {
+        ElMessage({
+          type: 'error',
+          message: '所填数据有误，请重新确认！',
+          showClose: true,
+        })
+      })
+    },
+    // 删除数据
+    delMovie(id){
+      console.log(id)
+      request.delete("/movies/delMovie/" +  id).then(res => {
+        if(res.code == '200'){
+          ElMessage({
+            showClose: true,
+            type: "success",
+            message: "删除数据成功！",
+            center: true,
+          })
+        }
+        else {
+          ElMessage({
+            showClose: true,
+            type: "error",
+            message: "删除数据失败！",
+            center: true,
+          })
+        }
+        this.load()
+      })
+    },
+    handleAvatarSuccess(res){
+      this.movieForm.img = res;
+    },
+    beforeAvatarUpload(file) {
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+      const isLt1M = file.size / 1024 / 1024 < 1;
+
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG或PNG 格式!');
+      }
+      if (!isLt1M) {
+        this.$message.error('上传头像图片大小不能超过 1MB!');
+      }
+      return isJPG && isLt1M;
+    },
   }
 }
 </script>
 
 <style scoped>
 
+/*上传头像*/
+.avatar-uploader .avatar {
+  width: 60px;
+  height: 80px;
+  display: block;
+}
+</style>
+<style>
+.avatar-uploader .el-upload {
+  border: 3px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 80px;
+  height: 80px;
+  text-align: center;
+}
+
+
+.el-form-item__label {
+  font-size: 20px;
+}
+.el-radio__input{
+  border-radius: 50%;
+  border: 1px ridge white;
+}
 </style>

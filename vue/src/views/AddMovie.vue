@@ -69,7 +69,7 @@
 <script>
 import {ElMessage} from "element-plus";
 import { Plus } from '@element-plus/icons-vue'
-import dayjs from "_dayjs@1.11.1@dayjs";
+import dayjs from "dayjs";
 import request from "@/utils/request";
 export default {
   name: "addMovie",
@@ -104,7 +104,7 @@ export default {
         ],
         introduce: [
           {required: true, message: '请输入电影见简介', trigger: 'blur'},
-          {max: 100 ,message: '地址长度不能超过100个字符',trigger: 'change'}
+          {max: 250 ,message: '简介长度不能超过250个字符',trigger: 'change'}
         ]
       },
     }
