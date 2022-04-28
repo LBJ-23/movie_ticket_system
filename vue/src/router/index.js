@@ -42,8 +42,18 @@ const routes = [
       {
         path: 'manageAccess',
         name: 'ManageAccess',
-        component: () => import("@/views/manageAccess"),
+        component: () => import("@/views/ManageAccess"),
       },
+      {
+        path: 'addMovie',
+        name: 'AddMovie',
+        component: () => import("@/views/AddMovie")
+      },
+      {
+        path: 'manageMovie',
+        name: 'ManageMovie',
+        component: () => import("@/views/ManageMovie")
+      }
     ]
   },
   {

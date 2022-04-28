@@ -7,12 +7,12 @@
         <el-col >
           <div class="demo-basic--circle" >
             <div class="block" style="display: flex;align-items: center">
-              <el-avatar :size="30" :src=this.loginImg />
+              <el-avatar :size="40" :src=this.loginImg />
             </div>
           </div>
         </el-col>
       </el-row>
-      <el-dropdown style="padding-left: 20px">
+      <el-dropdown style="padding-left: 10px">
         <span class="el-dropdown-link" style="font-size: 25px;display:flex;justify-content: right">
           <span>{{this.loginUsername}}</span>
           <el-icon class="el-icon--right" style="font-size: 20px;display: flex;justify-content: left">
@@ -22,6 +22,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="renew">个人信息</el-dropdown-item>
+            <el-dropdown-item>修改密码</el-dropdown-item>
             <el-dropdown-item @click="logout">登出</el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -140,6 +141,7 @@
         request.get("/managers/getOneManager/" + this.loginUser).then(res => {
           console.log(res)
           this.form = res.data
+          this.form.id = this.preFixInteger(this.form.id)
           this.loginUsername = res.data.username
           this.loginImg = res.data.img
         })
@@ -158,6 +160,18 @@
         console.log(res)
         this.form.img = res
         console.log(this.form.img)
+      },
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+        const isLt1M = file.size / 1024 / 1024 < 1;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG或PNG 格式!');
+        }
+        if (!isLt1M) {
+          this.$message.error('上传头像图片大小不能超过 1MB!');
+        }
+        return isJPG && isLt1M;
       },
       saveReManager(){
         this.$refs.renewForm.validate().then(()=>{
@@ -195,6 +209,11 @@
         console.log("in")
         console.log(this.remain)
         this.load()
+      },
+      // id填充0
+      preFixInteger(num) {
+        console.log((Array(6).join('0') + num).slice(-6))
+        return (Array(6).join('0') + num).slice(-6)
       },
     }
 
