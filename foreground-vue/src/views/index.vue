@@ -19,7 +19,7 @@
         <swiper
             :options="swiperOption"
             ref="mySwiper"
-            :slides-per-view="5"
+            :slides-per-view="3"
             class="swiper"
             @swiper="onSwiper"
             @slideChange="onSlideChange"
@@ -27,10 +27,10 @@
         >
           <swiper-slide v-for="item in now.slice(0,8)"  style="text-align: center" >
             <div>
-              <img :src="item.url" style="height: 300px;width: 200px" >
+              <img :src="item.img" style="height: 300px;width: 200px" >
             </div>
             <div>
-              <span style=";width: 200px">{{item.title}}</span>
+              <span style=";width: 200px">{{item.movieName}}</span>
             </div>
           </swiper-slide>
         </swiper>
@@ -50,7 +50,7 @@
         <swiper
             :options="swiperOption"
             ref="mySwiper"
-            :slides-per-view="5"
+            :slides-per-view="3"
             class="swiper"
             @swiper="onSwiper"
             @slideChange="onSlideChange"
@@ -58,10 +58,10 @@
         >
           <swiper-slide v-for="item in soon.slice(0,8)"  style="text-align: center" >
             <div>
-              <img :src="item.url" style="height: 300px;width: 200px" >
+              <img :src="item.img" style="height: 300px;width: 200px" >
             </div>
             <div>
-              <span style=";width: 200px">{{item.title}}</span>
+              <span style=";width: 200px">{{item.movieName}}</span>
             </div>
           </swiper-slide>
         </swiper>
@@ -76,6 +76,7 @@
 
 import { Swiper, SwiperSlide, Navigation} from 'swiper/vue';
 import 'swiper/css';
+import request from "@/utils/request";
 
 
 export default {
@@ -84,60 +85,13 @@ export default {
     Swiper,
     SwiperSlide,
   },
+  created() {
+    this.load()
+  },
   data(){
     return{
-      now:[
-        {
-          url: require('@/assets/img/movie1.png'),
-          title: '超凡蜘蛛侠'
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },{
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        }
-      ],
-      soon:[
-        {
-          url: require('@/assets/img/movie1.png'),
-          title: '超凡蜘蛛侠'
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        },{
-          url:require('@/assets/img/movie1.png')
-        },
-        {
-          url:require('@/assets/img/movie1.png')
-        }
-      ],
+      now:[],
+      soon:[],
       swiperOption:{
         loop:true,
         navigation: {
@@ -154,14 +108,16 @@ export default {
     onSlideChange() {
       console.log('slide change');
     },
-    //index.js
-    prevImg(){
-      console.log("prev")
-    },
-    nextImg(){
-      console.log("next")
-
-    },
+    load(){
+      request.get("/movies/getEarlyMovie").then(res =>{
+        console.log(res);
+        this.now = res.data
+      })
+      request.get("/movies/getLateMovie").then(res =>{
+        console.log(res);
+        this.soon = res.data
+      })
+    }
 
   },
 

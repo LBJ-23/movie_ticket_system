@@ -189,7 +189,7 @@ export default {
           label: '编号',
         },
         {
-          value: 'movieName',
+          value: 'movie_name',
           label: '电影名称',
         },
         {

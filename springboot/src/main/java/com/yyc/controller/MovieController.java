@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.SimpleFormatter;
 
 @RestController
@@ -19,6 +20,11 @@ public class MovieController {
 
     @Autowired
     private IMovieService movieService;
+
+    //获取现在时间并转换格式
+    Date now = new Date(System.currentTimeMillis());
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+    String fnow = sdf.format(now);
 
     //添加电影信息
     @PostMapping("/addMovie")
@@ -58,12 +64,31 @@ public class MovieController {
     //获取上映时间比现在早的电影
     @GetMapping("/getEarlyMovie")
     public Result<?> getEarlyMovie(){
-        Date now = new Date(System.currentTimeMillis());
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
-        String fnow = sdf.format(now);
         System.out.println(sdf.format(now));
-        QueryWrapper<Movie> q = Wrappers.<Movie>query();
+        List<Movie> movie = movieService.getEarlyMovie(fnow);
+        return Result.success(movie);
+    }
+    //获取上映时间比现在早的电影
+    @GetMapping("/getLateMovie")
+    public Result<?> getLateMovie(){
+        System.out.println(sdf.format(now));
+        List<Movie> movie = movieService.getLateMovie(fnow);
+        return Result.success(movie);
+    }
 
-        return Result.success();
+    @GetMapping("/earlyFindPage")
+    public Result<?> earlyFindPage(@RequestParam Integer pageNum,
+                                   @RequestParam Integer pageSize,
+                                   @RequestParam String type,
+                                   @RequestParam String search){
+
+        QueryWrapper<Movie> q = Wrappers.<Movie>query();
+        q.le("released_time",fnow).orderByDesc("released_time");
+        if (search!=""){
+            q.like(type,search);
+        }
+        Page<Movie> moviePage = movieService.page(new Page<>(pageNum, pageSize),q);
+
+        return Result.success(moviePage);
     }
 }
