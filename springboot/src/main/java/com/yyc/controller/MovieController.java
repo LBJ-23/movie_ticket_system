@@ -9,6 +9,7 @@ import com.yyc.service.IMovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.naming.spi.DirStateFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class MovieController {
         List<Movie> movie = movieService.getLateMovie(fnow);
         return Result.success(movie);
     }
-
+    //热映电影分页
     @GetMapping("/earlyFindPage")
     public Result<?> earlyFindPage(@RequestParam Integer pageNum,
                                    @RequestParam Integer pageSize,
@@ -90,5 +91,37 @@ public class MovieController {
         Page<Movie> moviePage = movieService.page(new Page<>(pageNum, pageSize),q);
 
         return Result.success(moviePage);
+    }
+    //即将上映电影分页
+    @GetMapping("/lateFindPage")
+    public Result<?> lateFindPage(@RequestParam Integer pageNum,
+                                   @RequestParam Integer pageSize,
+                                   @RequestParam String type,
+                                   @RequestParam String search){
+
+        QueryWrapper<Movie> q = Wrappers.<Movie>query();
+        q.gt("released_time",fnow).orderByAsc("released_time");
+        if (search!=""){
+            q.like(type,search);
+        }
+        Page<Movie> moviePage = movieService.page(new Page<>(pageNum, pageSize),q);
+
+        return Result.success(moviePage);
+    }
+    //获取单个电影信息
+    @GetMapping("/getMovie/{id}")
+    public Result<?> getMovie(@PathVariable Integer id){
+        Movie movie = movieService.getById(id);
+
+        if(movie.getReleasedTime().after(now)){
+            return Result.successSoon("201",movie);
+        }
+        return Result.success(movie);
+    }
+    //获取所有电影信息
+    @GetMapping("/getAllMovie")
+    public Result<?> getAllMovie(){
+        List<Movie> movie = movieService.getAllMovie();
+        return Result.success(movie);
     }
 }

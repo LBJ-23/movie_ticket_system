@@ -5,10 +5,10 @@
     </div>
     <div style="flex: 1;display: flex;align-items: end;justify-content: center">
       <el-menu
-          :default-active="index"
+          :default-active="this.$route.name"
           class="el-menu-demo"
           mode="horizontal"
-          style="width: 800px"
+          style="width: 900px"
           router
       >
         <el-menu-item index="index" >首页</el-menu-item>
@@ -17,7 +17,7 @@
         <el-menu-item index="news" >电影资讯</el-menu-item>
       </el-menu>
     </div>
-    <div style="width: 200px;display: flex;height:15vh;align-items: center">
+    <div style="width: 190px;display: flex;height:15vh;align-items: center">
       <el-row class="demo-avatar demo-basic">
         <el-col >
           <div class="demo-basic--circle" >
@@ -53,6 +53,10 @@ export default {
     ArrowDown,
   },
   methods:{
+
+  },
+  created() {
+    console.log()
 
   }
 }

@@ -1,18 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
     <el-form :model="userForm" ref="userForm" label-width="120px" size="large" class="userForm" :rules="userRules" >
-      <el-form-item label="头像" >
-        <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-        </el-upload>
-      </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="userForm.username" style="width: 500px"/>
       </el-form-item>

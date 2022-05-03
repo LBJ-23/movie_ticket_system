@@ -11,48 +11,63 @@ const routes = [
     children:[
       {
         path: 'index',
-        name: 'Index',
+        name: 'index',
         component: () => import("@/views/Index"),
       },
       {
         path: 'addUser',
-        name: 'AddUser',
+        name: 'addUser',
         component: () => import("@/views/AddUser"),
       },
       {
         path: 'manageUsers',
-        name: 'ManageUsers',
+        name: 'manageUsers',
         component: () => import("@/views/ManageUsers"),
       },
       {
         path: 'account',
-        name: 'Account',
+        name: 'account',
         component: () => import("@/views/Account"),
       },
       {
         path: 'addManager',
-        name: 'AddManager',
+        name: 'addManager',
         component: () => import("@/views/AddManager"),
       },
       {
         path: 'manageManager',
-        name: 'ManageManager',
+        name: 'manageManager',
         component: () => import("@/views/ManageManager"),
       },
       {
         path: 'manageAccess',
-        name: 'ManageAccess',
+        name: 'manageAccess',
         component: () => import("@/views/ManageAccess"),
       },
       {
         path: 'addMovie',
-        name: 'AddMovie',
+        name: 'addMovie',
         component: () => import("@/views/AddMovie")
       },
       {
         path: 'manageMovie',
-        name: 'ManageMovie',
+        name: 'manageMovie',
         component: () => import("@/views/ManageMovie")
+      },
+      {
+        path: 'addCinema',
+        name: 'addCinema',
+        component: () => import("@/views/AddCinema")
+      },
+      {
+        path: 'manageCinema',
+        name: 'manageCinema',
+        component: () => import("@/views/ManageCinema")
+      },
+      {
+        path: 'addSession',
+        name: 'addSession',
+        component: () => import("@/views/AddSession")
       }
     ]
   },

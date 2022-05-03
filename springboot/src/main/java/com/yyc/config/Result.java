@@ -55,6 +55,13 @@ public class Result<T> {
         return result;
     }
 
+    public static <T> Result<T> successSoon(String code,T data){
+        Result<T> result = new Result<>(data);
+        result.setCode(code);
+        result.setMsg("success");
+        return result;
+    }
+
     public static Result error(String code,String msg){
         Result result = new Result();
         result.setMsg(msg);

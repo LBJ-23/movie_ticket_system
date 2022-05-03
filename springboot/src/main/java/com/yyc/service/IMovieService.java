@@ -10,4 +10,6 @@ public interface IMovieService extends IService<Movie> {
     List<Movie> getEarlyMovie(String now);
 
     List<Movie> getLateMovie(String now);
+
+    List<Movie> getAllMovie();
 }

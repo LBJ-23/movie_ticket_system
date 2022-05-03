@@ -25,4 +25,9 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, Movie> implements IM
     public List<Movie> getLateMovie(String now) {
         return movieDao.getLateMovie(now);
     }
+
+    @Override
+    public List<Movie> getAllMovie() {
+        return movieDao.getAllMovie();
+    }
 }

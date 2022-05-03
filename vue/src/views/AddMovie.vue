@@ -86,7 +86,7 @@ export default {
         ],
         movieName: [
           {required: true, message: '请输入用户名', trigger: 'blur'},
-          {max: 20, message: '电影名长度不能超过20个字符', trigger: 'change'},
+          {max: 30, message: '电影名长度不能超过30个字符', trigger: 'blur'},
         ],
         duration: [
           {required: true, message: '请输入电影时长',trigger: 'blur'},

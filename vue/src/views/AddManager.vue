@@ -1,18 +1,6 @@
 <template>
   <div style="min-width: calc(100vh - 200px);min-height: 90vh;display:flex;align-items: center;justify-content: center">
     <el-form :model="form" ref="managerForm" label-width="120px" size="large" class="managerForm" >
-      <el-form-item label="头像" >
-        <el-upload
-            class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload"
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-        </el-upload>
-      </el-form-item>
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" style="width: 500px"/>
       </el-form-item>
@@ -37,26 +25,18 @@
         </el-col>
       </el-form-item>
       <el-form-item label="归属" prop="ascription">
-        <el-select v-model="form.ascription" placeholder="请选择所属地方">
-          <el-option label="诚丰电影院" value="诚丰电影院" />
-          <el-option label="银河电影院" value="银河电影院" />
+        <el-select v-model="form.ascription" placeholder="请选择所属地方" style="width: 500px">
+          <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.cinemaName"
+              :value="item.id"
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="电话号码" prop="phone">
         <el-input v-model="form.phone" />
       </el-form-item>
-<!--      <el-form-item label="Instant delivery">-->
-<!--        <el-switch v-model="form.delivery" />-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="Activity type">-->
-<!--        <el-checkbox-group v-model="form.type">-->
-<!--          <el-checkbox label="Online activities" name="type" />-->
-<!--          <el-checkbox label="Promotion activities" name="type" />-->
-<!--          <el-checkbox label="Offline activities" name="type" />-->
-<!--          <el-checkbox label="Simple brand exposure" name="type" />-->
-<!--        </el-checkbox-group>-->
-<!--      </el-form-item>-->
-
       <el-form-item label="地址" prop="address">
         <el-input v-model="form.address" type="textarea" style="border: outset"/>
       </el-form-item>
@@ -83,9 +63,13 @@ export default {
     ElMessage,
     Plus,
   },
+  created() {
+    this.lood()
+  },
   data(){
     return{
       form: {},
+      options:{},
       // 添加表单校验规则
       rules: {
         username: [
@@ -145,6 +129,13 @@ export default {
           message: "所填信息有误，请重新确认！",
           center: true
         })
+      })
+    },
+    lood(){
+      request.get("/cinemas/getAllCinema").then(res => {
+        res.data.unshift({id:'0',cinemaName:'系统管理员'})
+        console.log(res.data)
+        this.options = res.data
       })
     },
   }

@@ -17,9 +17,9 @@
     </el-button>
   </div>
   <div style="width: 100%;justify-content: center;display: flex;flex-flow: column;align-items: center">
-    <div style="width: 80%;min-width: 800px;border: 5px ridge;height: 200px;margin: 10px;display: flex;align-items: center" v-for="item in now">
+    <div style="width: 60%;min-width: 800px;border: 5px ridge;height: 250px;margin: 10px;display: flex;align-items: center" v-for="item in soon">
       <div style="display: flex;align-items: center;justify-content: center;height: 150px;width: 25%">
-        <img :src="item.img" style="height: 150px;">
+        <img :src="item.img" style="height: 200px;">
       </div>
       <div style="width: 75%">
         <div style="height: 50px;font-size: 25px">
@@ -33,6 +33,11 @@
         </div>
         <div style="height: 30px">
           <span>上映时间：{{item.releasedTime}}</span>
+        </div>
+        <div style="height: 50px;padding-right: 50px;display: flex;justify-content: right;align-items: end">
+          <router-link :to="{path:'/movieDetails',query: {id:item.id}}">
+            <span>详情>></span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -50,11 +55,11 @@
 </template>
 
 <script>
-import request from "@/utils/request";
 import {Search} from "@element-plus/icons";
+import request from "@/utils/request";
 
 export default {
-  name: "movie",
+  name: "soonMovie",
   components:{
     Search
   },
@@ -65,7 +70,7 @@ export default {
       currentPage: 1,
       total: 0,
       input: '',
-      now:[],
+      soon:[],
       options: [
         {
           value: 'movie_name',
@@ -87,7 +92,7 @@ export default {
   },
   methods:{
     load(){
-      request.get("/movies/earlyFindPage",{
+      request.get("/movies/lateFindPage",{
         params:{
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -97,7 +102,7 @@ export default {
 
       }).then(res =>{
         console.log(res)
-        this.now = res.data.records
+        this.soon = res.data.records
         this.total = res.data.total
       })
     },

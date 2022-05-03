@@ -32,7 +32,7 @@
         <el-table-column prop="password" label="密码" min-width="150" type="password"/>
         <el-table-column prop="sex" label="性别" min-width="60" />
         <el-table-column prop="birthday" label="出生日期" min-width="120" />
-        <el-table-column prop="ascription" label="归属" min-width="120" />
+        <el-table-column prop="ascription" label="归属" min-width="300" />
         <el-table-column prop="phone" label="电话号码" width="120" />
         <el-table-column prop="address" label="地址" width="600" />
 
@@ -104,8 +104,12 @@
           </el-form-item>
           <el-form-item label="归属" prop="ascription">
             <el-select v-model="form.ascription" placeholder="请选择归属地方">
-              <el-option label="诚丰电影院" value="诚丰电影院" />
-              <el-option label="银河电影院" value="银河电影院" />
+              <el-option
+                  v-for="item in asc"
+                  :key="item.id"
+                  :label="item.cinemaName"
+                  :value="item.id"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="电话号码" prop="phone">
@@ -159,6 +163,7 @@ export default {
       form:{},
       reback:{},
       InfoFilled,
+      asc:{},
 
       options:[
         {
@@ -223,8 +228,17 @@ export default {
       }).then(res =>{
         console.log(res)
         this.managerData = res.data.records
+        console.log('.....'+this.managerData)
         this.total = res.data.total
         this.managerData = this.add0ManagerId(this.managerData)
+        request.get("/cinemas/getAllCinema").then(r => {
+          r.data.unshift({id:'0',cinemaName:'系统管理员'})
+          console.log(r.data)
+          this.asc = r.data
+          for (let i=0; i<this.managerData.length; i++){
+            this.managerData[i].ascription = r.data[this.managerData[i].ascription].cinemaName
+          }
+        })
       })
     },
     // 改变当前页码数触发

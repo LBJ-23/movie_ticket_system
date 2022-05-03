@@ -44,10 +44,14 @@
         <el-menu-item index="addSession">添加场次信息</el-menu-item>
         <el-menu-item index="manageSession">管理场次信息</el-menu-item>
       </el-sub-menu>
-      <el-menu-item index="4" >
-        <el-icon><document /></el-icon>
-        <span>影院管理</span>
-      </el-menu-item>
+      <el-sub-menu index="cinema">
+        <template #title>
+          <el-icon><icon-menu /></el-icon>
+          <span>影院管理</span>
+        </template>
+        <el-menu-item index="addCinema">添加影院信息</el-menu-item>
+        <el-menu-item index="manageCinema">管理影院信息</el-menu-item>
+      </el-sub-menu>
       <el-menu-item index="5">
         <el-icon><setting /></el-icon>
         <span>订单管理</span>

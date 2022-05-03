@@ -13,7 +13,7 @@ public class Manager {
     private String password;
     private String sex;
     private Date birthday;
-    private String ascription;
+    private Integer ascription;
     private String phone;
     private String address;
     private String img;

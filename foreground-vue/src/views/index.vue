@@ -26,12 +26,14 @@
             
         >
           <swiper-slide v-for="item in now.slice(0,8)"  style="text-align: center" >
-            <div>
-              <img :src="item.img" style="height: 300px;width: 200px" >
-            </div>
-            <div>
-              <span style=";width: 200px">{{item.movieName}}</span>
-            </div>
+            <router-link :to="{path:'/movieDetails',query:{id:item.id}}">
+              <div>
+                <img :src="item.img" style="height: 300px;width: 200px" >
+              </div>
+              <div>
+                <span style=";width: 200px">{{item.movieName}}</span>
+              </div>
+            </router-link>
           </swiper-slide>
         </swiper>
       </div>
@@ -57,12 +59,14 @@
 
         >
           <swiper-slide v-for="item in soon.slice(0,8)"  style="text-align: center" >
-            <div>
-              <img :src="item.img" style="height: 300px;width: 200px" >
-            </div>
-            <div>
-              <span style=";width: 200px">{{item.movieName}}</span>
-            </div>
+            <router-link :to="{path:'/movieDetails',query:{id:item.id}}">
+              <div>
+                <img :src="item.img" style="height: 300px;width: 200px" >
+              </div>
+              <div>
+                <span style=";width: 200px">{{item.movieName}}</span>
+              </div>
+            </router-link>
           </swiper-slide>
         </swiper>
       </div>

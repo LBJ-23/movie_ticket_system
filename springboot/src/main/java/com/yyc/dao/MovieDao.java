@@ -15,4 +15,7 @@ public interface MovieDao extends BaseMapper<Movie> {
 
     @Select("select * from movie where released_time > #{now} order by released_time asc")
     List<Movie> getLateMovie(String now);
+
+    @Select("select * from movie")
+    List<Movie> getAllMovie();
 }

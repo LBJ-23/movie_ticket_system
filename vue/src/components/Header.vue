@@ -149,6 +149,7 @@
       logout(){
         this.$router.push("/login")
         sessionStorage.removeItem("loginUser")
+        sessionStorage.removeItem("ascription")
         ElMessage({
           type: 'success',
           message: '登出成功！',
