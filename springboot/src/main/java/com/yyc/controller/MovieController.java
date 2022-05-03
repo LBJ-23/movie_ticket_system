@@ -24,7 +24,7 @@ public class MovieController {
 
     //获取现在时间并转换格式
     Date now = new Date(System.currentTimeMillis());
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd KK:mm:ss ");
     String fnow = sdf.format(now);
 
     //添加电影信息
@@ -84,6 +84,7 @@ public class MovieController {
                                    @RequestParam String search){
 
         QueryWrapper<Movie> q = Wrappers.<Movie>query();
+        System.out.println(fnow);
         q.le("released_time",fnow).orderByDesc("released_time");
         if (search!=""){
             q.like(type,search);
@@ -123,5 +124,9 @@ public class MovieController {
     public Result<?> getAllMovie(){
         List<Movie> movie = movieService.getAllMovie();
         return Result.success(movie);
+    }
+    @GetMapping("/test")
+    public String test(){
+        return fnow;
     }
 }

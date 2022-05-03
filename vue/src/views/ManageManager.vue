@@ -32,7 +32,7 @@
         <el-table-column prop="password" label="密码" min-width="150" type="password"/>
         <el-table-column prop="sex" label="性别" min-width="60" />
         <el-table-column prop="birthday" label="出生日期" min-width="120" />
-        <el-table-column prop="ascription" label="归属" min-width="300" />
+        <el-table-column prop="ascName" label="归属" min-width="300" />
         <el-table-column prop="phone" label="电话号码" width="120" />
         <el-table-column prop="address" label="地址" width="600" />
 
@@ -102,8 +102,8 @@
               />
             </el-col>
           </el-form-item>
-          <el-form-item label="归属" prop="ascription">
-            <el-select v-model="form.ascription" placeholder="请选择归属地方">
+          <el-form-item label="归属" prop="ascription" >
+            <el-select v-model="form.ascription" placeholder="请选择归属地方" style="width: 300px">
               <el-option
                   v-for="item in asc"
                   :key="item.id"
@@ -232,11 +232,11 @@ export default {
         this.total = res.data.total
         this.managerData = this.add0ManagerId(this.managerData)
         request.get("/cinemas/getAllCinema").then(r => {
-          r.data.unshift({id:'0',cinemaName:'系统管理员'})
+          r.data.unshift({id:0,cinemaName:'系统管理员'})
           console.log(r.data)
           this.asc = r.data
           for (let i=0; i<this.managerData.length; i++){
-            this.managerData[i].ascription = r.data[this.managerData[i].ascription].cinemaName
+            this.managerData[i] = Object.assign(this.managerData[i],{ascName:r.data[this.managerData[i].ascription].cinemaName})
           }
         })
       })

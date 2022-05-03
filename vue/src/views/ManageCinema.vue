@@ -78,6 +78,9 @@
     <div>
       <el-dialog v-model="reCinemaDialog"  width="500px" center>
         <el-form :model="cinemaForm" ref="cinemaForm" label-width="120px" size="large" class="cinemaForm" :rules="cinemaRules" >
+          <el-form-item label="编号" prop="id">
+            <p v-text="cinemaForm.id" style="padding-left: 1vh"></p>
+          </el-form-item>
           <el-form-item label="宣传图片" prop="img">
             <el-upload
                 class="avatar-uploader"
@@ -149,6 +152,10 @@ export default {
           value: 'cinema_name',
           label: '影院名称',
         },
+        {
+          value: 'area',
+          label: '地区',
+        }
       ],
     }
   },

@@ -68,6 +68,11 @@ const routes = [
         path: 'addSession',
         name: 'addSession',
         component: () => import("@/views/AddSession")
+      },
+      {
+        path: 'manageSession',
+        name: 'manageSession',
+        component: () => import("@/views/ManageSession")
       }
     ]
   },

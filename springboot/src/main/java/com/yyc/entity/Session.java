@@ -22,7 +22,7 @@ public class Session {
         return start;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public void setStart(Date start) {
         this.start = start;
     }
@@ -32,7 +32,7 @@ public class Session {
         return end;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public void setEnd(Date end) {
         this.end = end;
     }
